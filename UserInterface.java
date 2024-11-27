@@ -1,34 +1,31 @@
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 
 import wordgames.games.*;
 
 public class UserInterface extends Application {
-    static Label turnLabel;
+    static Label promptLabel;
+
     static Button[][] buttonArray;
-    static Button startButton;
+    static Button anagramsButton;
+    static Button wordleButton;
+    static Button spellingBeeButton;
+    static Button quitButton;
+
     static Scene sceneVar;
 
     Anagrams anagrams;
     Wordle wordle;
     SpellingBee spellingBee;
-    
+
     public UserInterface() {
-        buttonArray = new Button[5][5];
-        for (int i = 0; i < 5; i++) {
-            Button[] buttonRow = new Button[5];
-            for (int j = 0; j < 5; j++) {
-                buttonRow[j] = new Button();
-                Button buttonVar = buttonRow[j];
-                buttonVar.setMinSize(60, 60);
-                buttonVar.setId(Integer.toString(10 * i + j));
-                buttonVar.setOnAction(evt -> buttonClick(buttonVar.getId()));
-            }
-            buttonArray[i] = buttonRow;
-        }
+        //
     }
 
     private void anagrams(int letters) {
@@ -43,9 +40,14 @@ public class UserInterface extends Application {
         spellingBee = new SpellingBee();
     }
 
-    private void buttonClick(String id) {
-        Button button = (Button) sceneVar.lookup("#" + id);
-        int convertedID = Integer.parseInt(id);
+    private void gameButton(String id) {
+        if (id == "anagrams") {
+            //
+        } else if (id == "wordle") {
+            //
+        } else if (id == "spellingbee") {
+            //
+        }
     }
 
     public static void main(String[] args) {
@@ -54,20 +56,35 @@ public class UserInterface extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        turnLabel = new Label();
+        promptLabel = new Label("What game would you like to play?");
+
+        anagramsButton = new Button("ANAGRAMS");
+        anagramsButton.setMinSize(60, 60);
+        anagramsButton.setId("anagrams");
+        anagramsButton.setOnAction(evt -> gameButton(anagramsButton.getId()));
+
+        wordleButton = new Button("WORDLE");
+        wordleButton.setMinSize(60, 60);
+        wordleButton.setId("wordle");
+        wordleButton.setOnAction(evt -> gameButton(wordleButton.getId()));
+
+        spellingBeeButton = new Button("SPELLING BEE");
+        spellingBeeButton.setMinSize(60, 60);
+        spellingBeeButton.setId("spellingbee");
+        spellingBeeButton.setOnAction(evt -> gameButton(spellingBeeButton.getId()));
+
+        quitButton = new Button("QUIT");
+        quitButton.setMinSize(60, 60);
+        quitButton.setOnAction(event -> {
+            Platform.exit();
+        });
 
         VBox screen = new VBox(5);
 
         HBox buttonColumns = new HBox();
-        for (int i = 0; i < 5; i++) {
-            VBox buttonRows = new VBox();
-            for (Button btn : buttonArray[i]) {
-                buttonRows.getChildren().add(btn);
-            }
-            buttonColumns.getChildren().add(buttonRows);
-        }
+        buttonColumns.getChildren().addAll(anagramsButton, wordleButton, spellingBeeButton);
 
-        screen.getChildren().addAll(buttonColumns, turnLabel);
+        screen.getChildren().addAll(promptLabel, buttonColumns, quitButton);
         StackPane layout = new StackPane();
         layout.getChildren().add(screen);
 
