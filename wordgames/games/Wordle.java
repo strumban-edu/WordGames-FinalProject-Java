@@ -1,14 +1,12 @@
 package wordgames.games;
 
-import java.util.List;
-
 public final class Wordle extends wordgames.WordGameGeneric {
     int[] clues;
-
-    public Wordle(int letters) {
-        List<String> wordOptions = words.get(letters - 3);
+    
+    public Wordle(int wordLength) {
+        this.wordOptions = words.get(wordLength - 3);
         this.answer = wordOptions.get(random.nextInt(wordOptions.size()));
-        this.clues = new int[letters];
+        this.clues = new int[wordLength];
     }
 
     public final boolean turn(String guess) {

@@ -1,15 +1,9 @@
 package wordgames.games;
 
-import java.util.List;
-
 public final class Anagrams extends wordgames.WordGameGeneric {
-    List<String> wordOptions;
-    int points;
-
-    public Anagrams(int letters) {
-        wordOptions = words.get(letters - 3);
+    public Anagrams(int wordLength) {
+        this.wordOptions = words.get(wordLength - 3);
         this.answer = wordOptions.get(random.nextInt(wordOptions.size()));
-        this.points = 0;
     }
 
     public final void points(int letters) {
@@ -17,14 +11,16 @@ public final class Anagrams extends wordgames.WordGameGeneric {
     }
 
     public final boolean turn(String guess) {
-        if (guess.length() >= 3) {
-            if (guess == this.answer) {
+        if (this.finished == false && !playedWords.contains(guess) && guess.length() >= 3) {
+            if (guess.equals(this.answer)) {
+                this.playedWords.add(guess);
                 points(guess.length());
                 return true;
             }
             
             for (String word : wordOptions) {
-                if (guess == word) {
+                if (guess.equals(word)) {
+                    this.playedWords.add(guess);
                     points(guess.length());
                     return true;
                 }
