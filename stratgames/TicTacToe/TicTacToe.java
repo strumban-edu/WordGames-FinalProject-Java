@@ -1,3 +1,5 @@
+package stratgames.TicTacToe;
+
 public class TicTacToe {
     int user;
     int[][] grid;

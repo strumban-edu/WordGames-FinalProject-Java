@@ -17,15 +17,16 @@ public abstract class WordGameGeneric {
     static public List<List<String>> words;
     static public List<List<String>> wordsUnique;
 
-    public int timeMode;
-    public int timeAdd;
-    
     public List<String> wordOptions;
     public List<String> playedWords;
+
+    public int timeMode;
+    public int timeAdd;
+    public Timer timer;
+
     public String answer;
     public int points;
     public boolean finished;
-    public Timer timer;
 
     public WordGameGeneric() {
         words = new ArrayList<List<String>>(12);

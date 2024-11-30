@@ -26,7 +26,7 @@ public final class Pangrams extends wordgames.WordGameGeneric {
     }
 
     public final boolean turn(String guess) {
-        if (this.finished == false && !playedWords.contains(guess) && guess.contains(middleLetter) && guess.length() >= 3) {
+        if (!this.finished && !playedWords.contains(guess) && guess.contains(middleLetter) && guess.length() >= 3) {
             if (guess.equals(this.answer)) {
                 this.playedWords.add(guess);
                 points(guess.length(), this.uniqueLetters);

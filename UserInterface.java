@@ -7,18 +7,124 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 
 import wordgames.games.*;
+import stratgames.*;
 
 public class UserInterface extends Application {
-    static Scene mainScene;
-    static Scene optionsScene;
+    public static Scene mainScene;
+
+    static Label promptLabel;
+    static Button quitButton;
+
+    static Button strategyGamesButton;
+    static Button wordGamesButton;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        promptLabel = new Label("What game would you like to play?");
+
+        strategyGamesButton = new Button("STRATEGY GAMES");
+        strategyGamesButton.setMinSize(60, 60);
+        strategyGamesButton.setId("strategy");
+        strategyGamesButton.setOnAction(evt -> SelectStrategyGame.show(primaryStage));
+
+        wordGamesButton = new Button("WORD GAMES");
+        wordGamesButton.setMinSize(60, 60);
+        wordGamesButton.setId("word");
+        wordGamesButton.setOnAction(evt -> SelectWordGame.show(primaryStage));
+
+        quitButton = new Button("QUIT");
+        quitButton.setMinSize(60, 60);
+        quitButton.setOnAction(event -> {
+            Platform.exit();
+        });
+
+        VBox screen = new VBox(5);
+
+        HBox buttonColumns = new HBox();
+        buttonColumns.getChildren().addAll(strategyGamesButton, wordGamesButton);
+
+        screen.getChildren().addAll(promptLabel, buttonColumns, quitButton);
+        StackPane layout = new StackPane();
+        layout.getChildren().add(screen);
+
+        primaryStage.setTitle("Word Games");
+        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(600);
+
+        mainScene = new Scene(layout);
+        primaryStage.setScene(mainScene);
+        primaryStage.show();
+    }
+}
+
+final class SelectStrategyGame {
+    public static void show(Stage primaryStage) {
+        //
+    }
+}
+
+final class SelectWordGame {
+    static Scene wordGameScene;
 
     static Label promptLabel;
     static Button backButton;
-    static Button quitButton;
 
     static Button anagramsButton;
     static Button wordleButton;
     static Button pangramsButton;
+
+    public static void show(Stage primaryStage) {
+        promptLabel = new Label("What game would you like to play?");
+
+        anagramsButton = new Button("ANAGRAMS");
+        anagramsButton.setMinSize(60, 60);
+        anagramsButton.setId("anagrams");
+        anagramsButton.setOnAction(evt -> WordGameOptions.show(primaryStage, wordGameScene, anagramsButton.getId()));
+
+        wordleButton = new Button("WORDLE");
+        wordleButton.setMinSize(60, 60);
+        wordleButton.setId("wordle");
+        wordleButton.setOnAction(evt -> WordGameOptions.show(primaryStage, wordGameScene, wordleButton.getId()));
+
+        pangramsButton = new Button("PANGRAMS");
+        pangramsButton.setMinSize(60, 60);
+        pangramsButton.setId("pangrams");
+        pangramsButton.setOnAction(evt -> WordGameOptions.show(primaryStage, wordGameScene, pangramsButton.getId()));
+
+        backButton = new Button("BACK");
+        backButton.setMinSize(60, 60);
+        backButton.setOnAction(event -> {
+            primaryStage.setScene(UserInterface.mainScene);
+        });
+
+        VBox screen = new VBox(5);
+
+        HBox buttonColumns = new HBox();
+        buttonColumns.getChildren().addAll(anagramsButton, wordleButton, pangramsButton);
+
+        screen.getChildren().addAll(promptLabel, buttonColumns, backButton);
+        StackPane layout = new StackPane();
+        layout.getChildren().add(screen);
+
+        primaryStage.setTitle("Word Games");
+        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(600);
+
+        wordGameScene = new Scene(layout);
+        primaryStage.setScene(wordGameScene);
+        primaryStage.show();
+    }
+}
+
+final class WordGameOptions {
+    static Scene wordOptionsScene;
+
+    static Label promptLabel;
+    static Button backButton;
 
     static Button casualButton;
     static Button twentySecButton;
@@ -42,27 +148,7 @@ public class UserInterface extends Application {
     static Button oneHourButton;
     static Button twoHourButton;
 
-    Anagrams anagrams;
-    Wordle wordle;
-    Pangrams pangrams;
-
-    public UserInterface() {
-        //
-    }
-
-    private void anagrams(int letters) {
-        anagrams = new Anagrams(letters);
-    }
-
-    private void wordle(int letters) {
-        wordle = new Wordle(letters);
-    }
-
-    private void pangrams(int uniqueLetters) {
-        pangrams = new Pangrams(uniqueLetters);
-    }
-
-    private void gameButton(Stage primaryStage, String id) {
+    public static void show(Stage primaryStage, Scene previousScene, String id) {
         promptLabel = new Label("Select a game mode:");
         casualButton = new Button("Casual");
         twentySecButton = new Button("20sec");
@@ -85,10 +171,10 @@ public class UserInterface extends Application {
         thirtyMinButton = new Button("30min");
         oneHourButton = new Button("1hr");
         twoHourButton = new Button("2hr");
-    
+        
         backButton = new Button("BACK");
         backButton.setOnAction(event -> {
-            primaryStage.setScene(mainScene);
+            primaryStage.setScene(previousScene);
         });
 
         VBox screen = new VBox(5);
@@ -108,63 +194,8 @@ public class UserInterface extends Application {
         StackPane layout = new StackPane();
         layout.getChildren().add(screen);
 
-        optionsScene = new Scene(layout);
-        primaryStage.setScene(optionsScene);
-        primaryStage.show();
-
-        if (id == "anagrams") {
-            System.out.println(id);
-        } else if (id == "wordle") {
-            //
-        } else if (id == "pangrams") {
-            //
-        }
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        promptLabel = new Label("What game would you like to play?");
-
-        anagramsButton = new Button("ANAGRAMS");
-        anagramsButton.setMinSize(60, 60);
-        anagramsButton.setId("anagrams");
-        anagramsButton.setOnAction(evt -> gameButton(primaryStage, anagramsButton.getId()));
-
-        wordleButton = new Button("WORDLE");
-        wordleButton.setMinSize(60, 60);
-        wordleButton.setId("wordle");
-        wordleButton.setOnAction(evt -> gameButton(primaryStage, wordleButton.getId()));
-
-        pangramsButton = new Button("PANGRAMS");
-        pangramsButton.setMinSize(60, 60);
-        pangramsButton.setId("pangrams");
-        pangramsButton.setOnAction(evt -> gameButton(primaryStage, pangramsButton.getId()));
-
-        quitButton = new Button("QUIT");
-        quitButton.setMinSize(60, 60);
-        quitButton.setOnAction(event -> {
-            Platform.exit();
-        });
-
-        VBox screen = new VBox(5);
-
-        HBox buttonColumns = new HBox();
-        buttonColumns.getChildren().addAll(anagramsButton, wordleButton, pangramsButton);
-
-        screen.getChildren().addAll(promptLabel, buttonColumns, quitButton);
-        StackPane layout = new StackPane();
-        layout.getChildren().add(screen);
-
-        primaryStage.setTitle("Word Games");
-        primaryStage.setMinHeight(400);
-        primaryStage.setMinWidth(600);
-
-        mainScene = new Scene(layout);
-        primaryStage.setScene(mainScene);
+        wordOptionsScene = new Scene(layout);
+        primaryStage.setScene(wordOptionsScene);
         primaryStage.show();
     }
 }
