@@ -10,30 +10,34 @@ public final class Pangrams extends wordgames.WordGameGeneric {
         this.wordOptions = wordsUnique.get(letterCount);
         this.answer = wordOptions.get(random.nextInt(wordOptions.size()));
         this.uniqueLetters = letterCount;
+        shuffle();
     }
 
-    public final void points(int wordLength, int letterCount) {
+    public final void points(int wordLength) {
         if (wordLength == 3) {
             this.points += 100;
         } else {
             this.points += wordLength * 100;
         }
-
-        //Essentially double points for using all letters
-        if (letterCount == this.uniqueLetters) {
-            this.points += wordLength * 100;
-        }
     }
 
-    public final boolean turn(String guess) {
-        if (!this.finished && !playedWords.contains(guess) && guess.contains(middleLetter) && guess.length() >= 3) {
-            if (guess.equals(this.answer)) {
-                this.playedWords.add(guess);
-                points(guess.length(), this.uniqueLetters);
-                return true;
-            }
+    public final String turn(String guess) {
+        if (this.finished) {
+            return "game complete";
+        }
+        
+        if (this.playedWords.contains(guess)) {
+            return "Word '" + guess + "'' already played!";
+        }
 
-            for (String word : words.get(guess.length())) {
+        if (guess.length() < 3) {
+            return "Word must be at least three letters";
+        }
+
+        if (!guess.contains(middleLetter)) {
+            return "Word must contain highlighted letter (" + middleLetter + ")";
+        } else {
+            for (String word : words.get(guess.length() - 3)) {
                 if (guess.equals(word)) {
                     this.playedWords.add(guess);
                     
@@ -41,13 +45,18 @@ public final class Pangrams extends wordgames.WordGameGeneric {
                     for (int i = 0; i < word.length(); i++) {
                         uniqueChars.add(word.charAt(i));
                     }
-                    points(word.length(), uniqueChars.size());
-                    
-                    return true;
+
+                    if (uniqueChars.size() == this.uniqueLetters) {
+                        points(word.length() * 2);
+                        return "AMAZING!";
+                    } else {
+                        points(word.length());
+                        return "Great!";
+                    }
                 }
             }
-        }
 
-        return false;
+            return "Word '" + guess + "' is invalid";
+        }
     }
 }

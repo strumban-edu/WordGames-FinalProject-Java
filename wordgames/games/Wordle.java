@@ -11,7 +11,7 @@ public final class Wordle extends wordgames.WordGameGeneric {
         this.guessNum = 0;
     }
 
-    public final boolean turn(String guess) {
+    public final String turn(String guess) {
         if (!this.finished) {
             guessNum += 1;
 
@@ -43,6 +43,6 @@ public final class Wordle extends wordgames.WordGameGeneric {
             this.finished = true;
         }
         
-        return false;
+        return "";
     }
 }
