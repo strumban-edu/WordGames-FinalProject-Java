@@ -1,6 +1,7 @@
+package userinterfaces;
+
 import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -166,8 +167,8 @@ final class WordGameOptions {
 
         Label letterLabel = new Label("Choose a number of letters");
         HBox letterCountBox = new HBox();
-        for (int i = 0; i <= 12; i++) {
-            int tempLetterCount = i + 3;
+        for (int i = 0; i <= 11; i++) {
+            int tempLetterCount = i + 4;
             ToggleButton letterButton = new ToggleButton(Integer.toString(tempLetterCount));
             letterButton.setToggleGroup(letterCountButtons);
             letterButton.setOnAction(evt -> wordGameController(letterButton, tempLetterCount, totalTimeSet, addTimeSet, timeControlString));
@@ -315,7 +316,15 @@ final class WordGameOptions {
     }
 }
 
-final class AnagramsInterface {
+abstract class GameInterface {
+    static Scene finishedScene;
+
+    protected void showCompletionScreen() {
+        //
+    }
+}
+
+final class AnagramsInterface extends GameInterface {
     private static Anagrams anagrams;
 
     static Scene anagramScene;
@@ -337,8 +346,9 @@ final class AnagramsInterface {
     }
 
     static void guess() {
-        String output = anagrams.turn(String.join("", guess));
-        if (output.equals("AMAZING!")) {
+        String guessStr = String.join("", guess);
+        String output = anagrams.turn(guessStr);
+        if (output.equals(guessStr + "! AMAZING!")) {
             for (int i = 0; i < guess.size(); i++) {
                 String letter = Character.toString(anagrams.answer.charAt(i));
                 Button letterButton = (Button) anagramScene.lookup("#" + letter + Integer.toString(i));
@@ -346,12 +356,11 @@ final class AnagramsInterface {
             }
         }
 
-        points = anagrams.points;
-        Label pointsLabel = (Label) anagramScene.lookup("#points");
-        pointsLabel.setText(Integer.toString(points));
-
         Label statusLabel = (Label) anagramScene.lookup("#status");
         statusLabel.setText(output);
+
+        Label pointsLabel = (Label) anagramScene.lookup("#points");
+        pointsLabel.setText(Integer.toString(anagrams.points));
 
         clear();
     }
@@ -411,15 +420,13 @@ final class AnagramsInterface {
         }
     }
 
-    static String formatTime(int milliTime) {
-        return String.format("%02d:%02d", 
-            TimeUnit.MILLISECONDS.toMinutes(milliTime),
-            TimeUnit.MILLISECONDS.toSeconds(milliTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliTime))
-        );
+    public static void back(Stage primaryStage, Scene previousScene) {
+        anagrams.timer.cancel();
+        primaryStage.setScene(previousScene);
     }
 
     public static void start(Stage primaryStage, Scene previousScene, int letterCount, int totalTimeSet, int addTimeSet, boolean showHints) {
-        anagrams = new Anagrams(letterCount);
+        anagrams = new Anagrams(letterCount, showHints, anagramScene);
 
         guess = new ArrayList<String>(letterCount);
         letterTotal = letterCount;
@@ -431,8 +438,8 @@ final class AnagramsInterface {
         Label pointsLabel = new Label("0");
         pointsLabel.setId("points");
 
-        Label timeLabel = new Label(formatTime(totalTimeSet));
-        pointsLabel.setId("points");
+        Label timeLabel = new Label();
+        timeLabel.setId("time");
 
         infoBox.getChildren().addAll(pointsLabel, timeLabel);
 
@@ -496,7 +503,7 @@ final class AnagramsInterface {
 
         Button backButton = new Button("Back");
         backButton.setFocusTraversable(false);
-        backButton.setOnAction(evt -> primaryStage.setScene(previousScene));
+        backButton.setOnAction(evt -> back(primaryStage, previousScene));
 
         VBox screen = new VBox(5);
         screen.getChildren().addAll(promptLabel, infoBox, labelBox, buttonBox, gameButtons, statusLabel, backButton);
@@ -525,17 +532,24 @@ final class AnagramsInterface {
                 Button letterButton = (Button) anagramScene.lookup("#delete");
                 letterButton.fire();
             } else if (evt.getCode() == KeyCode.SPACE) {
+                Button letterButton = (Button) anagramScene.lookup("#clear");
+                letterButton.fire();
+            } else if (evt.getCode() == KeyCode.CONTROL) {
                 Button letterButton = (Button) anagramScene.lookup("#shuffle");
                 letterButton.fire();
             }
         });
+
+        if (totalTimeSet != 0) {
+            anagrams.setTimer(totalTimeSet, addTimeSet, anagramScene);
+        }
 
         primaryStage.setScene(anagramScene);
         primaryStage.show();
     }
 }
 
-final class WordleInterface {
+final class WordleInterface extends GameInterface {
     private static Wordle wordle;
 
     public static void start(Stage primaryStage, Scene previousScene, int letterCount, int totalTimeSet, int addTimeSet, boolean showHints) {
@@ -543,7 +557,7 @@ final class WordleInterface {
     }
 }
 
-final class PangramsInterface {
+final class PangramsInterface extends GameInterface {
     private static Pangrams pangrams;
 
     public static void start(Stage primaryStage, Scene previousScene, int letterCount, int totalTimeSet, int addTimeSet, boolean showHints) {

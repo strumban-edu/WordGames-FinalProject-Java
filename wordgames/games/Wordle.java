@@ -1,12 +1,17 @@
 package wordgames.games;
 
+import java.util.List;
+
 public final class Wordle extends wordgames.WordGameGeneric {
     int[] clues;
     int guessNum;
 
-    public Wordle(int wordLength) {
-        this.wordOptions = words.get(wordLength - 3);
-        this.answer = wordOptions.get(random.nextInt(wordOptions.size()));
+    public Wordle(int wordLength, int timeMode, int timeAdd, boolean showHints) {
+        this.gameType = "wordle";
+
+        List<String> wordList = words.get(wordLength - 3);
+        this.answer = wordList.get(random.nextInt(wordList.size()));
+        
         this.clues = new int[wordLength];
         this.guessNum = 0;
     }

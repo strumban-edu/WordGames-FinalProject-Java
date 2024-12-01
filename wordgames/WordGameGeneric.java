@@ -1,30 +1,41 @@
 package wordgames;
 
+import userinterfaces.UserInterface;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.Collections;
 
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.Random;
 
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+
 public abstract class WordGameGeneric {
-    static public Random random;    
-    static public List<List<String>> words;
-    static public List<List<String>> wordsUnique;
+    static private Scene currentScene;
 
-    public List<String> wordOptions;
-    public List<String> playedWords;
+    static protected Random random;    
+    static protected List<List<String>> words;
+    static protected List<List<String>> wordsUnique;
 
-    public int timeMode;
-    public int timeAdd;
+    protected List<Set<String>> wordOptions;
+    protected List<String> playedWords;
+
     public Timer timer;
+    public int timeSet;
+    protected int timeAdd;
 
+    public String gameType;
     public String answer;
     public int points;
     public boolean finished;
@@ -33,7 +44,9 @@ public abstract class WordGameGeneric {
         random = new Random();
         words = new ArrayList<List<String>>(13);
         wordsUnique = new ArrayList<List<String>>(26);
-        playedWords = new ArrayList<>();
+
+        this.wordOptions = new ArrayList<Set<String>>(13);
+        this.playedWords = new ArrayList<>();
 
         //Set points to 0, set game state to running
         this.points = 0;
@@ -41,6 +54,7 @@ public abstract class WordGameGeneric {
 
         for (int i = 0; i < 13; i++) {
             words.add(new ArrayList<String>());
+            this.wordOptions.add(new HashSet<String>());
         }
 
         for (int i = 0; i < 26; i++) {
@@ -71,13 +85,62 @@ public abstract class WordGameGeneric {
         }
     }
 
-    public void setTimer(int startTime) {
-        new Timer().schedule(new TimerTask() {
+    protected void getCombos(String str, String sub) {
+        int stringLen = str.length();
+        int subLen = sub.length();
+
+        if (subLen >= 3 && words.get(subLen - 3).contains(sub)) {
+            wordOptions.get(subLen - 3).add(sub);
+        }
+        
+        if (stringLen > 0) {
+            for (int i = 0; i < stringLen; i++) {
+                getCombos(str.substring(0, i) + str.substring(i + 1, stringLen), sub + str.charAt(i));
+            }
+        }
+    }
+
+    private static String formatTime(int milliTime) {
+        return String.format("%02d:%02d", 
+            TimeUnit.MILLISECONDS.toMinutes(milliTime),
+            TimeUnit.MILLISECONDS.toSeconds(milliTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliTime))
+        );
+    }
+
+    private void setInterval() {
+        if (this.timeSet == 1) {
+            this.finished = true;
+            this.timer.cancel();
+        }
+        this.timeSet -= 1000;
+
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                  finished = true;
+                Label timeLabel = (Label) currentScene.lookup("#time");
+                timeLabel.setText(formatTime(timeSet));
             }
-        }, startTime);
+        });
+    }
+    
+    protected void addInterval(int timeAdd) {
+        this.timeSet += timeAdd;
+    }
+ 
+    public void setTimer(int timeMode, int addTime, Scene currScene) {
+        this.timer = new Timer();
+        this.timeSet = timeMode;
+        this.timeAdd = addTime;
+
+        currentScene = currScene;
+        Label timeLabel = (Label) currentScene.lookup("#time");
+        timeLabel.setText(formatTime(this.timeSet));
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                setInterval();
+            }
+        }, 0, 1000l);
     }
 
     public void shuffle() {

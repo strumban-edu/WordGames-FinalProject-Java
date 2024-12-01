@@ -1,14 +1,18 @@
 package wordgames.games;
 
 import java.util.HashSet;
+import java.util.List;
 
 public final class Pangrams extends wordgames.WordGameGeneric {
     public String middleLetter;
     private int uniqueLetters;
 
-    public Pangrams(int letterCount) {
-        this.wordOptions = wordsUnique.get(letterCount);
-        this.answer = wordOptions.get(random.nextInt(wordOptions.size()));
+    public Pangrams(int letterCount, int timeMode, int timeAdd, boolean showHints) {
+        this.gameType = "pangrams";
+
+        List<String> wordList = wordsUnique.get(letterCount);
+        this.answer = wordList.get(random.nextInt(wordList.size()));
+
         this.uniqueLetters = letterCount;
         shuffle();
     }
@@ -48,10 +52,10 @@ public final class Pangrams extends wordgames.WordGameGeneric {
 
                     if (uniqueChars.size() == this.uniqueLetters) {
                         points(word.length() * 2);
-                        return "AMAZING!";
+                        return guess + " is a valid word! AMAZING!";
                     } else {
                         points(word.length());
-                        return "Great!";
+                        return guess + " is a valid word! Great!";
                     }
                 }
             }
