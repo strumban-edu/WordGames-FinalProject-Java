@@ -8,8 +8,6 @@ public final class Pangrams extends wordgames.WordGameGeneric {
     private int uniqueLetters;
 
     public Pangrams(int letterCount, int timeMode, int timeAdd, boolean showHints) {
-        this.gameType = "pangrams";
-
         List<String> wordList = wordsUnique.get(letterCount);
         this.answer = wordList.get(random.nextInt(wordList.size()));
 

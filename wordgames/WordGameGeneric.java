@@ -1,7 +1,5 @@
 package wordgames;
 
-import userinterfaces.UserInterface;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -17,13 +15,10 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.Random;
 
-import javafx.application.Platform;
-import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public abstract class WordGameGeneric {
-    static private Scene currentScene;
-
+public abstract class WordGameGeneric extends wordgames.WordGameOptions {
     static protected Random random;    
     static protected List<List<String>> words;
     static protected List<List<String>> wordsUnique;
@@ -32,10 +27,7 @@ public abstract class WordGameGeneric {
     protected List<String> playedWords;
 
     public Timer timer;
-    public int timeSet;
-    protected int timeAdd;
 
-    public String gameType;
     public String answer;
     public int points;
     public boolean finished;
@@ -107,38 +99,33 @@ public abstract class WordGameGeneric {
         );
     }
 
-    private void setInterval() {
-        if (this.timeSet == 1) {
+    private void setTime() {
+        if (totalTime / SECONDS == 1) {
             this.finished = true;
             this.timer.cancel();
-        }
-        this.timeSet -= 1000;
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Label timeLabel = (Label) currentScene.lookup("#time");
-                timeLabel.setText(formatTime(timeSet));
-            }
-        });
+            Button endGameButton = (Button) currentScene.lookup("#endgame");
+            endGameButton.fire();
+        }
+        totalTime -= 1000;
+
+        Label timeLabel = (Label) currentScene.lookup("#time");
+        timeLabel.setText(formatTime(totalTime));
     }
     
     protected void addInterval(int timeAdd) {
-        this.timeSet += timeAdd;
+        totalTime += timeAdd;
     }
  
-    public void setTimer(int timeMode, int addTime, Scene currScene) {
+    protected void startTimer() {
         this.timer = new Timer();
-        this.timeSet = timeMode;
-        this.timeAdd = addTime;
 
-        currentScene = currScene;
         Label timeLabel = (Label) currentScene.lookup("#time");
-        timeLabel.setText(formatTime(this.timeSet));
+        timeLabel.setText(formatTime(totalTime));
 
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
-                setInterval();
+                setTime();
             }
         }, 0, 1000l);
     }

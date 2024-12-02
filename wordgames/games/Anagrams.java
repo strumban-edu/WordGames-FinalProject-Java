@@ -5,15 +5,17 @@ import java.util.List;
 import javafx.scene.Scene;
 
 public final class Anagrams extends wordgames.WordGameGeneric {
-    public Anagrams(int wordLength, boolean showHints, Scene currScene) {
-        this.gameType = "anagrams";
-
+    public Anagrams(int wordLength, Scene currScene) {
         List<String> wordList = words.get(wordLength - 3);
         this.answer = wordList.get(random.nextInt(wordList.size()));
         getCombos(this.answer, "");
 
         System.out.println(this.answer);
         shuffle();
+
+        if (totalTime != 0) {
+            startTimer();
+        }
     }
 
     public final void points(int letters) {
@@ -37,7 +39,7 @@ public final class Anagrams extends wordgames.WordGameGeneric {
                     this.playedWords.add(guess);
                     points(guess.length());
 
-                    addInterval(timeAdd);
+                    addInterval(addTime);
 
                     if (guess.length() == this.answer.length()) {
                         return guess + "! AMAZING!";

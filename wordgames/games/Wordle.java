@@ -7,8 +7,6 @@ public final class Wordle extends wordgames.WordGameGeneric {
     int guessNum;
 
     public Wordle(int wordLength, int timeMode, int timeAdd, boolean showHints) {
-        this.gameType = "wordle";
-
         List<String> wordList = words.get(wordLength - 3);
         this.answer = wordList.get(random.nextInt(wordList.size()));
         
