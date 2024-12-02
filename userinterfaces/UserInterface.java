@@ -11,6 +11,9 @@ import javafx.scene.control.*;
 public class UserInterface extends Application {
     public static Stage stage;
     public static Scene homeScene;
+    public static Scene stratGameScene;
+    public static Scene wordGameScene;
+
     public static Scene currentScene;
     public static Scene previousScene;
 

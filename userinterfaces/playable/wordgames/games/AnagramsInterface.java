@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 
 import wordgames.games.Anagrams;
 
-final public class AnagramsInterface extends userinterfaces.playable.wordgames.WordGameUserInterface {
+final public class AnagramsInterface extends userinterfaces.playable.wordgames.GenericWordGameInterface {
     private static Anagrams anagrams;
 
     static void buttonPress(Button letterButton) {
@@ -107,7 +107,7 @@ final public class AnagramsInterface extends userinterfaces.playable.wordgames.W
     }
 
     public AnagramsInterface() {
-        anagrams = new Anagrams(letterCount, currentScene);
+        anagrams = new Anagrams();
 
         guess = new ArrayList<String>(letterCount);
         letterTotal = letterCount;
@@ -185,14 +185,16 @@ final public class AnagramsInterface extends userinterfaces.playable.wordgames.W
 
         inputBox.getChildren().addAll(enterButton, deleteButton, clearButton);
 
-        HBox finishBox = new HBox();
+        HBox endGameBox = new HBox();
 
-        Button finishButton = new Button("Finish");
-        finishButton.setId("finish");
-        finishButton.setFocusTraversable(false);
-        finishButton.setOnAction(evt -> endGame(0, 0));
+        Button endGameButton = new Button("End Game");
+        endGameButton.setId("endgame");
+        endGameButton.setFocusTraversable(false);
+        endGameButton.setOnAction(evt -> endGame(anagrams));
 
-        gameButtons.getChildren().addAll(shuffleBox, inputBox, finishBox);
+        endGameBox.getChildren().add(endGameButton);
+
+        gameButtons.getChildren().addAll(shuffleBox, inputBox, endGameBox);
 
         Label statusLabel = new Label("Type or click to play a word!");
         statusLabel.setId("status");
@@ -233,11 +235,18 @@ final public class AnagramsInterface extends userinterfaces.playable.wordgames.W
             } else if (evt.getCode() == KeyCode.CONTROL) {
                 Button letterButton = (Button) anagramScene.lookup("#shuffle");
                 letterButton.fire();
+            } else if (evt.getCode() == KeyCode.ESCAPE) {
+                Button letterButton = (Button) anagramScene.lookup("#endgame");
+                letterButton.fire();
             }
         });
 
         previousScene = currentScene;
         currentScene = anagramScene;
         stage.setScene(anagramScene);
+
+        if (totalTime != 0) {
+            anagrams.startTimer();
+        }
     }
 }

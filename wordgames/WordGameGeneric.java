@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Collections;
 
 import java.util.Scanner;
@@ -15,16 +17,18 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.Random;
 
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public abstract class WordGameGeneric extends wordgames.WordGameOptions {
-    static protected Random random;    
-    static protected List<List<String>> words;
-    static protected List<List<String>> wordsUnique;
+    static protected Random random;
 
-    protected List<Set<String>> wordOptions;
-    protected List<String> playedWords;
+    static protected List<List<String>> words;
+    static protected List<List<Set<Character>>> wordsUnique;
+
+    public List<SortedSet<String>> wordOptions;
+    public List<Set<String>> playedWords;
 
     public Timer timer;
 
@@ -35,10 +39,10 @@ public abstract class WordGameGeneric extends wordgames.WordGameOptions {
     public WordGameGeneric() {
         random = new Random();
         words = new ArrayList<List<String>>(13);
-        wordsUnique = new ArrayList<List<String>>(26);
+        wordsUnique = new ArrayList<List<Set<Character>>>(26);
 
-        this.wordOptions = new ArrayList<Set<String>>(13);
-        this.playedWords = new ArrayList<>();
+        this.wordOptions = new ArrayList<SortedSet<String>>(13);
+        this.playedWords = new ArrayList<Set<String>>(13);
 
         //Set points to 0, set game state to running
         this.points = 0;
@@ -46,11 +50,12 @@ public abstract class WordGameGeneric extends wordgames.WordGameOptions {
 
         for (int i = 0; i < 13; i++) {
             words.add(new ArrayList<String>());
-            this.wordOptions.add(new HashSet<String>());
+            this.wordOptions.add(new TreeSet<String>());
+            this.playedWords.add(new HashSet<String>());
         }
 
         for (int i = 0; i < 26; i++) {
-            wordsUnique.add(new ArrayList<String>());
+            wordsUnique.add(new ArrayList<Set<Character>>());
         }
         
         try {
@@ -69,26 +74,11 @@ public abstract class WordGameGeneric extends wordgames.WordGameOptions {
                 for (int i = 0; i < word.length(); i++) {
                     uniqueChars.add(word.charAt(i));
                 }
-                wordsUnique.get(uniqueChars.size() - 1).add(word);
+                wordsUnique.get(uniqueChars.size() - 1).add(uniqueChars);
             }
             wordFileReader.close();
         } catch (FileNotFoundException e) {
             System.err.println("Word file could not be found or read.");
-        }
-    }
-
-    protected void getCombos(String str, String sub) {
-        int stringLen = str.length();
-        int subLen = sub.length();
-
-        if (subLen >= 3 && words.get(subLen - 3).contains(sub)) {
-            wordOptions.get(subLen - 3).add(sub);
-        }
-        
-        if (stringLen > 0) {
-            for (int i = 0; i < stringLen; i++) {
-                getCombos(str.substring(0, i) + str.substring(i + 1, stringLen), sub + str.charAt(i));
-            }
         }
     }
 
@@ -100,24 +90,26 @@ public abstract class WordGameGeneric extends wordgames.WordGameOptions {
     }
 
     private void setTime() {
-        if (totalTime / SECONDS == 1) {
-            this.finished = true;
-            this.timer.cancel();
-
+        totalTime -= 1000;
+        if (totalTime == 0) {
             Button endGameButton = (Button) currentScene.lookup("#endgame");
             endGameButton.fire();
         }
-        totalTime -= 1000;
 
-        Label timeLabel = (Label) currentScene.lookup("#time");
-        timeLabel.setText(formatTime(totalTime));
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Label timeLabel = (Label) currentScene.lookup("#time");
+                timeLabel.setText(formatTime(totalTime));
+            }
+        });
     }
     
     protected void addInterval(int timeAdd) {
         totalTime += timeAdd;
     }
  
-    protected void startTimer() {
+    public void startTimer() {
         this.timer = new Timer();
 
         Label timeLabel = (Label) currentScene.lookup("#time");
@@ -127,7 +119,7 @@ public abstract class WordGameGeneric extends wordgames.WordGameOptions {
             public void run() {
                 setTime();
             }
-        }, 0, 1000l);
+        }, 1000l, 1000l);
     }
 
     public void shuffle() {

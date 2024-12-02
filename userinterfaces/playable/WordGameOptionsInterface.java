@@ -19,7 +19,6 @@ public class WordGameOptionsInterface extends wordgames.WordGameOptions {
     }
 
     public WordGameOptionsInterface() {
-
         Label promptLabel = new Label();
 
         Label letterLabel = new Label("Choose a number of letters");
@@ -113,39 +112,6 @@ public class WordGameOptionsInterface extends wordgames.WordGameOptions {
         twoHourButton.setOnAction(event -> setTime(2 * HOURS, 0, "2hr"));
         twoHourButton.setToggleGroup(timeControlButtons);
 
-        if (gameName.equals("anagrams")) {
-            threeMinButton.fire();
-
-            Button letterButton = (Button) currentScene.lookup("#6");
-            letterButton.fire();
-        } else if (gameName.equals("wordle")) {
-            casualButton.fire();
-
-            Button letterButton = (Button) currentScene.lookup("#5");
-            letterButton.fire();
-
-            twentySecP1Button.setDisable(true);
-            twentySecP2Button.setDisable(true);
-            twentySecP4Button.setDisable(true);
-
-            oneMinP3Button.setDisable(true);
-            oneMinP6Button.setDisable(true);
-            oneMinP9Button.setDisable(true);
-
-            threeMinP3Button.setDisable(true);
-            threeMinP9Button.setDisable(true);
-            threeMinP18Button.setDisable(true);
-
-            nineMinP3Button.setDisable(true);
-            nineMinP9Button.setDisable(true);
-            nineMinP18Button.setDisable(true);
-        } else if (gameName.equals("pangrams")) {
-            casualButton.fire();
-            
-            Button letterButton = (Button) currentScene.lookup("#7");
-            letterButton.fire();
-        }
-
         CheckBox showHintsBox = new CheckBox("Show hints");
         showHintsBox.setOnAction(evt -> showHints = showHintsBox.isSelected());
 
@@ -177,6 +143,40 @@ public class WordGameOptionsInterface extends wordgames.WordGameOptions {
         Scene wordOptionsScene = new Scene(layout);
         previousScene = currentScene;
         currentScene = wordOptionsScene;
+
+        if (gameName.equals("anagrams")) {
+            threeMinButton.fire();
+
+            ToggleButton letterButton = (ToggleButton) currentScene.lookup("#6");
+            letterButton.fire();
+        } else if (gameName.equals("wordle")) {
+            casualButton.fire();
+
+            ToggleButton letterButton = (ToggleButton) currentScene.lookup("#5");
+            letterButton.fire();
+
+            twentySecP1Button.setDisable(true);
+            twentySecP2Button.setDisable(true);
+            twentySecP4Button.setDisable(true);
+
+            oneMinP3Button.setDisable(true);
+            oneMinP6Button.setDisable(true);
+            oneMinP9Button.setDisable(true);
+
+            threeMinP3Button.setDisable(true);
+            threeMinP9Button.setDisable(true);
+            threeMinP18Button.setDisable(true);
+
+            nineMinP3Button.setDisable(true);
+            nineMinP9Button.setDisable(true);
+            nineMinP18Button.setDisable(true);
+        } else if (gameName.equals("pangrams")) {
+            casualButton.fire();
+            
+            ToggleButton letterButton = (ToggleButton) currentScene.lookup("#7");
+            letterButton.fire();
+        }
+
         stage.setScene(currentScene);
     }
 }
