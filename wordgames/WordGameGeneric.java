@@ -91,16 +91,17 @@ public abstract class WordGameGeneric extends wordgames.WordGameOptions {
 
     private void setTime() {
         totalTime -= 1000;
-        if (totalTime == 0) {
-            Button endGameButton = (Button) currentScene.lookup("#endgame");
-            endGameButton.fire();
-        }
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 Label timeLabel = (Label) currentScene.lookup("#time");
                 timeLabel.setText(formatTime(totalTime));
+
+                if (totalTime == 0) {
+                    Button endGameButton = (Button) currentScene.lookup("#endgame");
+                    endGameButton.fire();
+                }
             }
         });
     }

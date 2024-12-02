@@ -40,14 +40,17 @@ class WordBuilderEndScreen extends wordgames.WordGameOptions {
         VBox totalWordsBox = new VBox();
         int guessCount = 0;
         int totalWords = 0;
-        for (int i = 0; i < letterCount - 2; i++) {
-            int letters = letterCount - i;
+        for (int i = 0; i < wordbuilder.playedWords.size(); i++) {
+            int letters = wordbuilder.playedWords.size() + 3 - 1 - i;
             Set<String> guessSet = wordbuilder.playedWords.get(letters - 3);
-
-            VBox wordsBox = new VBox();
-
-            Label lengthLabel = new Label(letters + " letter words:");
             
+            if (wordbuilder.wordOptions.get(letters - 3).size() == 0) {
+                continue;
+            }
+            
+            VBox wordsBox = new VBox();
+            
+            Label lengthLabel = new Label(letters + " letter words:");
             wordsBox.getChildren().add(lengthLabel);
 
             for (String word : wordbuilder.wordOptions.get(letters - 3)) {
@@ -72,22 +75,26 @@ class WordBuilderEndScreen extends wordgames.WordGameOptions {
         
         double rankPercent = (double) guessCount / (double) totalWords;
         String rank;
-        if (rankPercent == 100) {
-            rank = "Word Wizard";
-        } else if (rankPercent >= 90) {
-            rank = "Word Wizard";
-        } else if (rankPercent >= 80) {
-            rank = "Word Wizard";
-        } else if (rankPercent >= 60) {
+        if (rankPercent == 1) {
+            rank = "DICTIONARY DEITY";
+        } else if (rankPercent >= 0.95) {
+            rank = "Articulation Aristocrat";
+        } else if (rankPercent >= 0.8) {
+            rank = "Syllogism Sovereign";
+        } else if (rankPercent >= 0.7) {
+            rank = "Nomenclature Noble";
+        } else if (rankPercent >= 0.55) {
+            rank = "Vocabulary Viscount";
+        } else if (rankPercent >= 0.40) {
+            rank = "Composition Count";
+        } else if (rankPercent >= 0.25) {
             rank = "Phrase Pharaoh";
-        } else if (rankPercent >= 40) {
+        } else if (rankPercent >= 0.15) {
             rank = "Word Wizard";
-        } else if (rankPercent >= 20) {
-            rank = "Word Wizard";
-        } else if (rankPercent >= 10) {
-            rank = "Word Wizard";
+        } else if (rankPercent >= 0.05) {
+            rank = "Reading Royal";
         } else {
-            rank = "Word Wizard";
+            rank = "Lexical Loser";
         }
         Label wordCountLabel = new Label("Guessed " + guessCount + "/" + totalWords + " words");
         Label rankLabel = new Label("Your rank: " + rank);

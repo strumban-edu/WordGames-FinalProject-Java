@@ -33,32 +33,32 @@ public final class Anagrams extends wordgames.WordGameGeneric {
 
     public final String turn(String guess) {
         if (this.finished) {
-            return "game complete";
+            return "Game Complete";
         }
         
+        if (guess.length() < 3) {
+            return "Word must be at least three letters.";
+        }
+
         if (this.playedWords.get(guess.length() - 3).contains(guess)) {
             return "Word " + guess + " already played!";
         }
 
-        if (guess.length() < 3) {
-            return "Word must be at least three letters.";
-        } else {
-            for (String word : wordOptions.get(guess.length() - 3)) {
-                if (guess.equals(word)) {
-                    this.playedWords.get(guess.length() - 3).add(guess);
-                    points(guess.length());
+        for (String word : wordOptions.get(guess.length() - 3)) {
+            if (guess.equals(word)) {
+                this.playedWords.get(guess.length() - 3).add(guess);
+                points(guess.length());
 
-                    addInterval(addTime);
+                addInterval(addTime);
 
-                    if (guess.length() == this.answer.length()) {
-                        return guess + "! AMAZING!";
-                    }
-
-                    return guess + "! Great!";
+                if (guess.length() == this.answer.length()) {
+                    return guess + "! AMAZING!";
                 }
-            }
 
-            return "Word " + guess + " is invalid.";
+                return guess + "! Great!";
+            }
         }
+
+        return "Word " + guess + " is invalid.";
     }
 }

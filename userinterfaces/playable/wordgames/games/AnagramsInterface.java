@@ -102,7 +102,10 @@ final public class AnagramsInterface extends userinterfaces.playable.wordgames.G
     }
 
     public static void back(Scene previousScene) {
-        anagrams.timer.cancel();
+        if (anagrams.timer != null) {
+            anagrams.timer.cancel();
+        }
+
         stage.setScene(previousScene);
     }
 
@@ -183,7 +186,7 @@ final public class AnagramsInterface extends userinterfaces.playable.wordgames.G
         clearButton.setFocusTraversable(false);
         clearButton.setOnAction(evt -> clear());
 
-        inputBox.getChildren().addAll(enterButton, deleteButton, clearButton);
+        inputBox.getChildren().addAll(clearButton, deleteButton, enterButton);
 
         HBox endGameBox = new HBox();
 
@@ -241,7 +244,7 @@ final public class AnagramsInterface extends userinterfaces.playable.wordgames.G
             }
         });
 
-        previousScene = currentScene;
+        previousScene = homeScene;
         currentScene = anagramScene;
         stage.setScene(anagramScene);
 
