@@ -43,7 +43,7 @@ class WordBuilderEndScreen extends wordgames.WordGameOptions {
         for (int i = 0; i < wordbuilder.playedWords.size(); i++) {
             int letters = wordbuilder.playedWords.size() + 3 - 1 - i;
             Set<String> guessSet = wordbuilder.playedWords.get(letters - 3);
-            
+
             if (wordbuilder.wordOptions.get(letters - 3).size() == 0) {
                 continue;
             }
@@ -99,12 +99,19 @@ class WordBuilderEndScreen extends wordgames.WordGameOptions {
         Label wordCountLabel = new Label("Guessed " + guessCount + "/" + totalWords + " words");
         Label rankLabel = new Label("Your rank: " + rank);
 
-        Button doneButton = new Button("Done");
+        HBox optionsBox = new HBox();
+
+        Button doneButton = new Button("Home");
         doneButton.setOnAction(event -> stage.setScene(homeScene));
+
+        Button againButton = new Button("Play Again");
+        againButton.setOnAction(event -> stage.setScene(wordGameScene));
+
+        optionsBox.getChildren().addAll(doneButton, againButton);
 
         VBox screen = new VBox(5);
 
-        screen.getChildren().addAll(pointsLabel, wordCountLabel, rankLabel, results, doneButton);
+        screen.getChildren().addAll(pointsLabel, wordCountLabel, rankLabel, results, optionsBox);
         StackPane layout = new StackPane();
         layout.getChildren().add(screen);
 
@@ -114,14 +121,42 @@ class WordBuilderEndScreen extends wordgames.WordGameOptions {
     }
 }
 
-class PangramsEndScreen extends wordgames.WordGameOptions {
-    PangramsEndScreen(Pangrams pangrams) {
-        //
-    }
-}
-
 class WordleEndScreen extends wordgames.WordGameOptions {
     WordleEndScreen(Wordle wordle) {
-        //
+        Label winState = new Label();
+        if (wordle.gameWon) {
+            winState.setText("Yippee! You Won!");
+        } else {
+            winState.setText("Game Over - You Lost");
+        }
+
+        Label word = new Label("The word was: " + wordle.answer);
+
+        Label timeLabel = new Label();
+        if (setTimeInt != 0) {
+            timeLabel.setText("You had " + wordle.formatTime(totalTime) + " out of " + wordle.formatTime(setTimeInt) + " left.");
+        }
+
+        Label turnLabel = new Label("You used " + wordle.guessNum + " out of your " + (wordle.answer.length() + 1) + " turns.");
+
+        HBox optionsBox = new HBox();
+
+        Button doneButton = new Button("Home");
+        doneButton.setOnAction(event -> stage.setScene(homeScene));
+
+        Button againButton = new Button("Play Again");
+        againButton.setOnAction(event -> stage.setScene(wordGameScene));
+
+        optionsBox.getChildren().addAll(doneButton, againButton);
+
+        VBox screen = new VBox(5);
+
+        screen.getChildren().addAll(winState, word, timeLabel, turnLabel, optionsBox);
+        StackPane layout = new StackPane();
+        layout.getChildren().add(screen);
+
+        Scene anagramsEndScene = new Scene(layout);
+        currentScene = anagramsEndScene;
+        stage.setScene(currentScene);
     }
 }

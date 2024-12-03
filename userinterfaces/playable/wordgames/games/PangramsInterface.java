@@ -27,10 +27,22 @@ public final class PangramsInterface extends userinterfaces.playable.wordgames.G
         String output = pangrams.turn(guessStr);
 
         if (output.equals(guessStr + "! AMAZING!")) {
+            if (showHints) {
+                Label hintLabel = (Label) currentScene.lookup("#hint" + Integer.toString(guessStr.length() - 3));
+                String currentHint = hintLabel.getText();
+                int count = Integer.parseInt(currentHint.replace(guessStr.length() + " letter words left: ", ""));
+                hintLabel.setText(guessStr.length() + " letter words left: " + --count);
+            }
+
             for (Character c : pangrams.answer.toCharArray()) {
                 Button letterButton = (Button) currentScene.lookup("#" + c.toString());
                 letterButton.setStyle("-fx-base: lightgreen");
             }
+        } else if (output.equals(guessStr + "! Great!") && showHints) {
+            Label hintLabel = (Label) currentScene.lookup("#hint" + Integer.toString(guessStr.length() - 3));
+            String currentHint = hintLabel.getText();
+            int count = Integer.parseInt(currentHint.replace(guessStr.length() + " letter words left: ", ""));
+            hintLabel.setText(guessStr.length() + " letter words left: " + --count);
         }
 
         Label statusLabel = (Label) currentScene.lookup("#status");
@@ -43,7 +55,6 @@ public final class PangramsInterface extends userinterfaces.playable.wordgames.G
     }
 
     static void delete() {
-        System.out.println(guess);
         if (guess.size() == 0) {
             return;
         }
@@ -190,8 +201,24 @@ public final class PangramsInterface extends userinterfaces.playable.wordgames.G
         backButton.setFocusTraversable(false);
         backButton.setOnAction(evt -> back(previousScene));
 
+        ScrollPane hintPane = new ScrollPane();
+
+        if (showHints) {
+            VBox hintBox = new VBox();
+            for (int i = 0; i < pangrams.wordOptions.size() - 2; i++) {
+                int letters = i + 3;
+                
+                Label wordCountLabel = new Label();
+                wordCountLabel.setText(letters + " letter words left: " + pangrams.wordOptions.get(i).size());
+                wordCountLabel.setId("hint" + i);
+
+                hintBox.getChildren().add(wordCountLabel);
+            }
+            hintPane.setContent(hintBox);
+        }
+
         VBox screen = new VBox(5);
-        screen.getChildren().addAll(promptLabel, infoBox, squarePane, buttonBox, gameButtons, statusLabel, backButton);
+        screen.getChildren().addAll(promptLabel, infoBox, squarePane, buttonBox, gameButtons, statusLabel, backButton, hintPane);
 
         StackPane layout = new StackPane();
         layout.getChildren().add(screen);

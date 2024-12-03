@@ -11,6 +11,7 @@ public class WordGameOptions extends userinterfaces.SelectGameType {
     protected static boolean showHints;
 
     protected static String promptStr;
+    protected static int setTimeInt;
     protected static String timeControlStr;
 
     private static void wordGamePromptController() {
@@ -25,6 +26,7 @@ public class WordGameOptions extends userinterfaces.SelectGameType {
 
     protected static void setTime(int timeSet, int addTimeSet, String timeControl) {
         totalTime = timeSet;
+        setTimeInt = timeSet;
         addTime = addTimeSet * SECONDS;
         timeControlStr = timeControl;
 

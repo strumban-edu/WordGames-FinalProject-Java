@@ -6,23 +6,23 @@ public final class Anagrams extends wordgames.WordGameGeneric {
     public Anagrams() {
         List<String> wordList = words.get(letterCount - 3);
         this.answer = wordList.get(random.nextInt(wordList.size()));
+        
         getCombos();
-
-        System.out.println(this.answer);
         shuffle();
     }
 
     private void getCombos() {
-        for (int i = 0; i < letterCount - 3; i++) {
+        for (int i = 0; i < letterCount - 2; i++) {
             for (String word : words.get(i)) {
                 String lettersLeft = word;
 
                 for (Character letter : this.answer.toCharArray()) {
                     lettersLeft = lettersLeft.replaceFirst(letter.toString(), "");
-                }
-                
-                if (lettersLeft.length() == 0) {
-                    wordOptions.get(i).add(word);
+                    
+                    if (lettersLeft.length() == 0) {
+                        wordOptions.get(i).add(word);
+                        break;
+                    }
                 }
             }
         }

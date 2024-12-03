@@ -19,6 +19,8 @@ public class WordGameOptionsInterface extends wordgames.WordGameOptions {
     }
 
     public WordGameOptionsInterface() {
+        showHints = false;
+
         Label promptLabel = new Label();
 
         Label letterLabel = new Label("Choose a number of letters");
@@ -141,6 +143,7 @@ public class WordGameOptionsInterface extends wordgames.WordGameOptions {
         layout.getChildren().add(screen);
 
         Scene wordOptionsScene = new Scene(layout);
+        wordGameScene = wordOptionsScene;
         previousScene = currentScene;
         currentScene = wordOptionsScene;
 
@@ -151,6 +154,7 @@ public class WordGameOptionsInterface extends wordgames.WordGameOptions {
             letterButton.fire();
         } else if (gameName.equals("wordle")) {
             casualButton.fire();
+            showHintsBox.fire();
 
             ToggleButton letterButton = (ToggleButton) currentScene.lookup("#5");
             letterButton.fire();

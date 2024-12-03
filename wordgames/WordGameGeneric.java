@@ -82,7 +82,7 @@ public abstract class WordGameGeneric extends wordgames.WordGameOptions {
         }
     }
 
-    private static String formatTime(int milliTime) {
+    public String formatTime(int milliTime) {
         return String.format("%02d:%02d", 
             TimeUnit.MILLISECONDS.toMinutes(milliTime),
             TimeUnit.MILLISECONDS.toSeconds(milliTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliTime))
@@ -114,6 +114,7 @@ public abstract class WordGameGeneric extends wordgames.WordGameOptions {
         this.timer = new Timer();
 
         Label timeLabel = (Label) currentScene.lookup("#time");
+        
         timeLabel.setText(formatTime(totalTime));
 
         timer.scheduleAtFixedRate(new TimerTask() {

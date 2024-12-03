@@ -11,7 +11,17 @@ public final class Pangrams extends wordgames.WordGameGeneric {
     public Set<String> specialLetterArr;
 
     public Pangrams() {
-        specialLetterCount = 1;
+        if (letterCount >= 14) {
+            specialLetterCount = 5;
+        } else if (letterCount >= 12) {
+            specialLetterCount = 4;
+        } else if (letterCount >= 10) {
+            specialLetterCount = 3;
+        } else if (letterCount >= 8) {
+            specialLetterCount = 2;
+        } else {
+            specialLetterCount = 1;
+        }
 
         this.letters = new HashSet<>();
         this.specialLetterArr = new HashSet<>(specialLetterCount);
@@ -33,10 +43,6 @@ public final class Pangrams extends wordgames.WordGameGeneric {
 
         getUniqueCombos();
         shuffle();
-
-        if (totalTime != 0) {
-            startTimer();
-        }
     }
 
     private void getUniqueCombos() {
@@ -54,10 +60,10 @@ public final class Pangrams extends wordgames.WordGameGeneric {
 
                 for (String letter : letters) {
                     lettersLeft = lettersLeft.replace(letter, "");
-                }
-
-                if (lettersLeft.length() == 0) {
-                    wordOptions.get(i).add(word);
+                    
+                    if (lettersLeft.length() == 0) {
+                        wordOptions.get(i).add(word);
+                    }
                 }
             }
         }
