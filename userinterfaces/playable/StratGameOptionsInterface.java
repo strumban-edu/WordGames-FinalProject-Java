@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 
 import userinterfaces.playable.wordgames.games.*;
 
-public class StratGameOptionsInterface extends wordgames.WordGameOptions {
+public class StratGameOptionsInterface extends stratgames.StratGameOptions {
     private static void startGame() {
         if (gameName.equals("anagrams")) {
             new AnagramsInterface();

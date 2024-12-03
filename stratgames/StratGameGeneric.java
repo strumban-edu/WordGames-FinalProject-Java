@@ -21,7 +21,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public abstract class StratGameGeneric extends wordgames.WordGameOptions {
+public abstract class StratGameGeneric extends stratgames.StratGameOptions {
     static protected Random random;
 
     static protected int[][] board;
