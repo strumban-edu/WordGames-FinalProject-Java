@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 
 import userinterfaces.playable.wordgames.games.*;
 
-public class WordGameOptionsInterface extends wordgames.WordGameOptions {
+public class StratGameOptionsInterface extends wordgames.WordGameOptions {
     private static void startGame() {
         if (gameName.equals("anagrams")) {
             new AnagramsInterface();
@@ -18,7 +18,7 @@ public class WordGameOptionsInterface extends wordgames.WordGameOptions {
         }
     }
 
-    public WordGameOptionsInterface() {
+    public StratGameOptionsInterface() {
         showHints = false;
 
         Label promptLabel = new Label();
@@ -145,8 +145,6 @@ public class WordGameOptionsInterface extends wordgames.WordGameOptions {
         Scene wordOptionsScene = new Scene(layout);
         wordGameScene = wordOptionsScene;
 
-        stage.setScene(wordOptionsScene);
-
         if (gameName.equals("anagrams")) {
             threeMinButton.fire();
 
@@ -180,5 +178,7 @@ public class WordGameOptionsInterface extends wordgames.WordGameOptions {
             ToggleButton letterButton = (ToggleButton) currentScene.lookup("#7");
             letterButton.fire();
         }
+
+        stage.setScene(currentScene);
     }
 }

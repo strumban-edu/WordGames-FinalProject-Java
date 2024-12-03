@@ -1,13 +1,13 @@
-package stratgames.TicTacToe;
+package stratgames.games.TicTacToe;
 
 public class TicTacToe {
     int user;
     int[][] grid;
     boolean win;
 
-    public TicTacToe() {
+    public TicTacToe(int size) {
         this.user = -1;
-        this.grid = new int[5][5];
+        this.grid = new int[size][size];
         this.win = false;
     }
     

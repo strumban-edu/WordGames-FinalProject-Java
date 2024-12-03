@@ -2,6 +2,10 @@ package userinterfaces;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
@@ -10,6 +14,8 @@ import javafx.scene.control.*;
 
 public class UserInterface extends Application {
     public static Stage stage;
+    public static StackPane layout;
+
     public static Scene homeScene;
     public static Scene stratGameScene;
     public static Scene wordGameScene;
@@ -42,16 +48,30 @@ public class UserInterface extends Application {
         VBox screen = new VBox(5);
 
         HBox gameBox = new HBox();
+        gameBox.setAlignment(Pos.CENTER);
         gameBox.getChildren().addAll(strategyGamesButton, wordGamesButton);
 
         screen.getChildren().addAll(promptLabel, gameBox, quitButton);
+        screen.setAlignment(Pos.CENTER);
+
         StackPane layout = new StackPane();
+        layout.setPadding(new Insets(20, 40, 20, 40));
         layout.getChildren().add(screen);
 
         homeScene = new Scene(layout);
         currentScene = homeScene;
+
         stage.setScene(currentScene);
+        stage.setTitle("Play Games");
+
+        stage.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            previousScene = oldScene;
+            currentScene = newScene; 
+            //layout.getChildren().clear();
+        });
 
         stage.show();
+        stage.setMinHeight(700);
+        stage.setMinWidth(1000);
     }
 }

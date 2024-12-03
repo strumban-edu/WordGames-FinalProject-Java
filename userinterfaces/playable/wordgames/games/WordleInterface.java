@@ -194,6 +194,12 @@ public final class WordleInterface extends userinterfaces.playable.wordgames.Gen
         layout.getChildren().add(screen);
 
         Scene wordleScene = new Scene(layout);
+        stage.setScene(wordleScene);
+
+        if (totalTime != 0) {
+            wordle.startTimer();
+        }
+
         wordleScene.setOnKeyPressed(evt -> {
             if (TOTAL.contains(evt.getCode().toString())) {
                 Button letterButton = (Button) wordleScene.lookup("#" + evt.getCode().toString());
@@ -209,13 +215,5 @@ public final class WordleInterface extends userinterfaces.playable.wordgames.Gen
                 letterButton.fire();
             }
         });
-
-        previousScene = homeScene;
-        currentScene = wordleScene;
-        stage.setScene(currentScene);
-
-        if (totalTime != 0) {
-            wordle.startTimer();
-        }
     }
 }

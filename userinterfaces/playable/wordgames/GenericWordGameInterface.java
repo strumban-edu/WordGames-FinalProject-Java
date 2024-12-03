@@ -115,9 +115,8 @@ class WordBuilderEndScreen extends wordgames.WordGameOptions {
         StackPane layout = new StackPane();
         layout.getChildren().add(screen);
 
-        Scene anagramsEndScene = new Scene(layout);
-        currentScene = anagramsEndScene;
-        stage.setScene(currentScene);
+        Scene wordBuilderEndScene = new Scene(layout);
+        stage.setScene(wordBuilderEndScene);
     }
 }
 
@@ -155,8 +154,7 @@ class WordleEndScreen extends wordgames.WordGameOptions {
         StackPane layout = new StackPane();
         layout.getChildren().add(screen);
 
-        Scene anagramsEndScene = new Scene(layout);
-        currentScene = anagramsEndScene;
-        stage.setScene(currentScene);
+        Scene wordleEndScene = new Scene(layout);
+        stage.setScene(wordleEndScene);
     }
 }

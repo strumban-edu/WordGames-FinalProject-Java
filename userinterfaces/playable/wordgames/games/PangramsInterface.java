@@ -224,6 +224,12 @@ public final class PangramsInterface extends userinterfaces.playable.wordgames.G
         layout.getChildren().add(screen);
 
         Scene pangramsScene = new Scene(layout);
+        stage.setScene(pangramsScene);
+
+        if (totalTime != 0) {
+            pangrams.startTimer();
+        }
+        
         pangramsScene.setOnKeyPressed(event -> {
             if (pangrams.answer.contains(event.getCode().toString()) || pangrams.specialLetterArr.contains(event.getCode().toString())) {
                 Button letterButton = (Button) pangramsScene.lookup("#" + event.getCode().toString());
@@ -246,13 +252,5 @@ public final class PangramsInterface extends userinterfaces.playable.wordgames.G
                 letterButton.fire();
             }
         });
-
-        previousScene = homeScene;
-        currentScene = pangramsScene;
-        stage.setScene(pangramsScene);
-
-        if (totalTime != 0) {
-            pangrams.startTimer();
-        }
     }
 }

@@ -241,6 +241,12 @@ final public class AnagramsInterface extends userinterfaces.playable.wordgames.G
         layout.getChildren().add(screen);
 
         Scene anagramScene = new Scene(layout);
+        stage.setScene(anagramScene);
+
+        if (totalTime != 0) {
+            anagrams.startTimer();
+        }
+
         anagramScene.setOnKeyPressed(evt -> {
             if (anagrams.answer.contains(evt.getCode().toString())) {
                 for (int i = 0; i < letterCount; i++) {
@@ -271,13 +277,5 @@ final public class AnagramsInterface extends userinterfaces.playable.wordgames.G
                 letterButton.fire();
             }
         });
-
-        previousScene = homeScene;
-        currentScene = anagramScene;
-        stage.setScene(anagramScene);
-
-        if (totalTime != 0) {
-            anagrams.startTimer();
-        }
     }
 }

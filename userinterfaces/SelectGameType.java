@@ -44,7 +44,7 @@ final class SelectWordGame extends SelectGameType {
 
         Button backButton = new Button("BACK");
         backButton.setMinSize(60, 60);
-        backButton.setOnAction(event -> stage.setScene(previousScene));
+        backButton.setOnAction(event -> stage.setScene(homeScene));
 
         VBox screen = new VBox(5);
 
@@ -56,8 +56,7 @@ final class SelectWordGame extends SelectGameType {
         layout.getChildren().add(screen);
 
         Scene wordGameScene = new Scene(layout);
-        previousScene = currentScene;
-        currentScene = wordGameScene;
-        stage.setScene(currentScene);
+        
+        stage.setScene(wordGameScene);
     }
 }
